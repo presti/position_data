@@ -27,10 +27,17 @@ void _testInitSample() {
       // Fake Service to generate the List<Position>.
       // A unit test should test that the repository created the
       // correct data based on what it receives from the service.
-      File file = File('test/test_resources/positions.json');
-      // If this fails, DO NOT run this test with all the others,
-      // run it separately.
-      String fileString = file.readAsStringSync();
+      String path = 'test/test_resources/positions.json';
+      File file;
+      String fileString;
+      try {
+        file = File('../$path');
+        fileString = file.readAsStringSync();
+      } on FileSystemException {
+        file = File(path);
+        fileString = file.readAsStringSync();
+      }
+      ;
       Map<String, dynamic> json =
           convert.jsonDecode(fileString) as Map<String, dynamic>;
       PositionDto dto = PositionDto.fromJson(json);
